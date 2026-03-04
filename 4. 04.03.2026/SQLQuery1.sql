@@ -417,7 +417,8 @@ or Department.Id is null
 --et editor saaks aru, et kumma tabeli muutujat soovitakse kasutada ja ei tekiks
 --segadust
 select Product.Name as [Product Name], ProductNumber, ListPrice, 
-ProductModel.Name as [Product Model Name]
+ProductModel.Name as [Product Model Name], 
+Product.ProductModelId, ProductModel.ProductModelId
 --mõnikord peab ka tabeli ette kirjutama täpsustava info
 --nagu on SalesLt.Product
 from SalesLt.Product

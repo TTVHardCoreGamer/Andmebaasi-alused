@@ -8,7 +8,7 @@ create database IKT25tar
 use IKT25tar
 
 --andmebaasi kustutamine koodiga
---otsida kood ¸lesse
+--otsida kood √ºlesse
 drop database IKT25tar
 
 --teeme uuesti andmebaasi IKT25tar
@@ -18,15 +18,15 @@ create database IKT25tar
 create table Gender
 (
 --Meil on muutuja Id,
---mis on t‰isarv andmet¸¸p,
+--mis on t√§isarv andmet√º√ºp,
 --kui sisestad andmed, 
---siis see veerg peab olema t‰idetud,
---tegemist on primaarvıtmega
+--siis see veerg peab olema t√§idetud,
+--tegemist on primaarv√µtmega
 Id int not null primary key,
 --veeru nimi on Gender,
---10 t‰hem‰rki on max pikkus,
+--10 t√§hem√§rki on max pikkus,
 --andmed peavad olema sisestatud e 
---ei tohi olla t¸hi
+--ei tohi olla t√ºhi
 Gender nvarchar(10) not null
 )
 
@@ -39,7 +39,7 @@ values (1, 'Male'),
 (2, 'Female')
 
 --vaatame tabeli sisu
--- * t‰hendab, et n‰ita kıike seal sees olevat infot
+-- * t√§hendab, et n√§ita k√µike seal sees olevat infot
 select * from Gender
 
 --teeme tabeli nimega Person
@@ -67,15 +67,15 @@ values (1, 'Superman', 's@s.com', 2),
 (6, 'Antman', 'ant"ant.com', 2),
 (8, NULL, NULL, 2)
 
---n‰en tabelis olevat infot
+--n√§en tabelis olevat infot
 select * from Person
 
---vıırvıtme ¸henduse loomine kahe tabeli vahel
+--v√µ√µrv√µtme √ºhenduse loomine kahe tabeli vahel
 alter table Person add constraint tblPerson_GenderId_FK
 foreign key (GenderId) references Gender(Id)
 
 -- kui sisestad uue rea andmeid ja ei ole sisestanud GenderId alla 
--- v‰‰rtust, siis automaatselt sisestab sellele reale v‰‰rtuse 3
+-- v√§√§rtust, siis automaatselt sisestab sellele reale v√§√§rtuse 3
 -- e unknown
 alter table Person
 add constraint DF_Persons_GenderId
@@ -111,7 +111,7 @@ where Id = 7
 
 select * from Person
 
---soovin kustutada ¸he rea
+--soovin kustutada √ºhe rea
 -- kuidas seda teha????
 delete from Person where Id = 8
 
@@ -121,30 +121,30 @@ select * from Person
 alter table Person
 add City nvarchar(50)
 
---kıik, kes elavad Gothami linnas
+--k√µik, kes elavad Gothami linnas
 select * from Person where City = 'Gotham'
 -- k]ik, kes ei ela Gothamis
 select * from Person where City != 'Gotham'
 -- variant nr 2. K]ik, kes ei ela Gothamis
 select * from Person where City <> 'Gotham'
 
---n‰itab teatud vanusega inimesi
+--n√§itab teatud vanusega inimesi
 -- valime 151, 35, 26
 select * from Person where Age in (151, 35, 26)
 select * from Person where Age = 151 or Age = 35 or Age = 26
 
--- soovin n‰ha inimesi vahemikus 22 kuni 41
+-- soovin n√§ha inimesi vahemikus 22 kuni 41
 select * from Person where Age between 22 and 41
 
---wildcard e n‰itab kıik g-t‰hega linnad
+--wildcard e n√§itab k√µik g-t√§hega linnad
 select * from Person where City like 'g%'
---otsib emailid @-m‰rgiga
+--otsib emailid @-m√§rgiga
 select * from Person where Email like '%@%'
 
---tahan n‰ha, kellel on emailis ees ja peale @-m‰rki ¸ks t‰ht
+--tahan n√§ha, kellel on emailis ees ja peale @-m√§rki √ºks t√§ht
 select * from Person where Email like '_@_.com'
 
---kıik, kelle nimes ei ole esimene t‰ht W, A, S
+--k√µik, kelle nimes ei ole esimene t√§ht W, A, S
 select * from Person where Name like '[^WAS]%'
 
 --k]ik, kes elavad Gothamis ja New Yorkis
@@ -155,59 +155,59 @@ select * from Person where (City = 'Gotham' or City = 'New York')
 select * from Person where (City = 'Gotham' or City = 'New York')
 and Age >= 30
 
---kuvab t‰hestikulises j‰rjekorras inimesi ja vıtab aluseks 
+--kuvab t√§hestikulises j√§rjekorras inimesi ja v√µtab aluseks 
 -- Name veeru
 select * from Person
 select * from Person order by Name
 
---vıtab kolm esimest rida Person tabelist
+--v√µtab kolm esimest rida Person tabelist
 select top 3 * from Person
 
 --tund 3
 --25.02.2026
---kolm esimest, aga tabeli j‰rjestus on Age ja siis Name
+--kolm esimest, aga tabeli j√§rjestus on Age ja siis Name
 select top 3 Age, Name from Person
 
---n‰ita esimesed 50% tabelist
+--n√§ita esimesed 50% tabelist
 select top 50 percent * from Person
 select * from Person
 
---j‰rjestab vanuse j‰rgi isikud
+--j√§rjestab vanuse j√§rgi isikud
 select * from Person order by Age desc
 
---muudab Age muutuja int-ks ja n‰itab vanuselises j‰rjestuses
--- cast abil saab andmet¸¸pi muuta
+--muudab Age muutuja int-ks ja n√§itab vanuselises j√§rjestuses
+-- cast abil saab andmet√º√ºpi muuta
 select * from Person order by cast(Age as int) desc
 
--- kıikide isikute koondvanus e liidab kıik kokku
+-- k√µikide isikute koondvanus e liidab k√µik kokku
 select sum(cast(Age as int)) from Person
 
---kıige noorem isik tuleb ¸les leida
+--k√µige noorem isik tuleb √ºles leida
 select min(cast(Age as int)) from Person
 
---kıige vanem isik
+--k√µige vanem isik
 select max(cast(Age as int)) from Person
 
 --muudame Age muutuja int peale
--- n‰eme konkreetsetes linnades olevate isikute koondvanust
+-- n√§eme konkreetsetes linnades olevate isikute koondvanust
 select City, sum(Age) as TotalAge from Person group by City
 
---kuidas saab koodiga muuta andmet¸¸pi ja selle pikkust
+--kuidas saab koodiga muuta andmet√º√ºpi ja selle pikkust
 alter table Person 
 alter column Name nvarchar(25)
 
--- kuvab esimeses reas v‰lja toodud j‰rjestuses ja kuvab Age-i 
+-- kuvab esimeses reas v√§lja toodud j√§rjestuses ja kuvab Age-i 
 -- TotalAge-ks
---j‰rjestab City-s olevate nimede j‰rgi ja siis Genderid j‰rgi
+--j√§rjestab City-s olevate nimede j√§rgi ja siis Genderid j√§rgi
 --kasutada group by-d ja order by-d
 select City, GenderId, sum(Age) as TotalAge from Person
 group by City, GenderId
 order by City
 
---n‰itab, et mitu rida andmeid on selles tabelis
+--n√§itab, et mitu rida andmeid on selles tabelis
 select count(*) from Person
 
---n‰itab tulemust, et mitu inimest on Genderid v‰‰rtusega 2
+--n√§itab tulemust, et mitu inimest on Genderid v√§√§rtusega 2
 --konkreetses linnas
 --arvutab vanuse kokku selles linnas
 select GenderId, City, sum(Age) as TotalAge, count(Id) as 
@@ -215,9 +215,9 @@ select GenderId, City, sum(Age) as TotalAge, count(Id) as
 where GenderId = '1'
 group by GenderId, City
 
---n‰itab ‰ra inimeste koondvanuse, mis on ¸le 41 a ja
+--n√§itab √§ra inimeste koondvanuse, mis on √ºle 41 a ja
 --kui palju neid igas linnas elab
---eristab inimese soo ‰ra
+--eristab inimese soo √§ra
 select GenderId, City, sum(Age) as TotalAge, count(Id) as 
 [Total Person(s)] from Person
 where GenderId = '2'
@@ -271,11 +271,11 @@ on Employees.DepartmentId = Department.Id
 ---
 
 --arvutab k]ikide palgad kokku Employees tabelist
-select sum(cast(Salary as int)) from Employees --arvutab kıikide palgad kokku
--- kıige v‰iksema palga saaja
+select sum(cast(Salary as int)) from Employees --arvutab k√µikide palgad kokku
+-- k√µige v√§iksema palga saaja
 select min(cast(Salary as int)) from Employees
 
---n‰itab veerge Location ja Palka. Palga veerg kuvatakse TotalSalary-ks
+--n√§itab veerge Location ja Palka. Palga veerg kuvatakse TotalSalary-ks
 --teha left join Department tabeliga
 --grupitab Locationiga
 select Location, sum(cast(Salary as int)) as TotalSalary
@@ -289,7 +289,7 @@ group by Location
 -- 03.03.26
 
 select * from Employees
-select sum(cast(Salary as int)) from Employees  --arvutab kıikide palgad kokku
+select sum(cast(Salary as int)) from Employees  --arvutab k√µikide palgad kokku
 
 -- lisame veeru City ja pikkus on 30
 -- Employees tabelisse lisada
@@ -300,7 +300,7 @@ select City, Gender, sum(cast(Salary as int)) as TotalSalary
 from Employees
 group by City, Gender
 
---peaaegu sama p‰ring, aga linnad on t‰hestikulises j‰rjestuses
+--peaaegu sama p√§ring, aga linnad on t√§hestikulises j√§rjestuses
 select City, Gender, sum(cast(Salary as int)) as TotalSalary 
 from Employees 
 group by City, Gender 
@@ -310,13 +310,13 @@ select * from Employees
 --on vaja teada, et mitu inimest on nimekirjas selles tabelis
 select count (*) from Employees
 
---mitu tˆˆtajat on soo ja linna kaupa tˆˆtamas
+--mitu t√∂√∂tajat on soo ja linna kaupa t√∂√∂tamas
 select City, Gender, sum(cast(Salary as int)) as TotalSalary,
 count (Id) as [Total Employee(s)]
 from Employees 
 group by Gender, City 
 
---kuvab kas naised vıi mehed linnade kaupa
+--kuvab kas naised v√µi mehed linnade kaupa
 --kasutage where
 select City, Gender, sum(cast(Salary as int)) as TotalSalary,
 count (Id) as [Total Employee(s)]
@@ -331,7 +331,7 @@ from Employees
 group by Gender, City 
 having Gender = 'Female'
 
---kıik, kes teenivad rohkem, kui 4000
+--k√µik, kes teenivad rohkem, kui 4000
 select * from Employees where sum(cast(Salary as int)) > 4000
 
 --teeme variandi, kus saame tulemuse
@@ -361,9 +361,9 @@ drop column City
 
 
 --inner join 
---kuvab neid, kellel on DepartmentName all olemas v‰‰rtus
+--kuvab neid, kellel on DepartmentName all olemas v√§√§rtus
 --mitte kattuvad read eemaldatakse tulemusest
--- ja sellep‰rast ei n‰idata Jamesi ja Russelit tabelis
+-- ja sellep√§rast ei n√§idata Jamesi ja Russelit tabelis
 --kuna neil on DepartmentId NULL
 select Name, Gender, Salary, DepartmentName
 from Employees
@@ -373,32 +373,32 @@ on Employees.DepartmentId = Department.Id
 -- left join
 select Name, Gender, Salary, DepartmentName
 from Employees
-left join Department  --vıib kasutada ka LEFT OUTER JOIN-i
+left join Department  --v√µib kasutada ka LEFT OUTER JOIN-i
 on Employees.DepartmentId = Department.Id
 --uurige, mis on left join
---n‰itab andmeid, kus vasakpoolsest tabelist isegi, siis kui seal puudub
---vıırvıtme reas v‰‰rtus
+--n√§itab andmeid, kus vasakpoolsest tabelist isegi, siis kui seal puudub
+--v√µ√µrv√µtme reas v√§√§rtus
 
 --right join
 select Name, Gender, Salary, DepartmentName
 from Employees
-right join Department  --vıib kasutada ka RIGHT OUTER JOIN-i
+right join Department  --v√µib kasutada ka RIGHT OUTER JOIN-i
 on Employees.DepartmentId = Department.Id
---right join n‰itab paremas (Department) tabelis olevaid v‰‰rtuseid,
---mis ei ¸hti vasaku (Employees) tabeliga
+--right join n√§itab paremas (Department) tabelis olevaid v√§√§rtuseid,
+--mis ei √ºhti vasaku (Employees) tabeliga
 
 --outer join
 select Name, Gender, Salary, DepartmentName
 from Employees
 full outer join Department
 on Employees.DepartmentId = Department.Id
---mılema tabeli read kuvab
+--m√µlema tabeli read kuvab
 
 --teha cross join
 select Name, Gender, Salary, DepartmentName
 from Employees
 cross join Department
---korrutab kıik omavahel l‰bi
+--korrutab k√µik omavahel l√§bi
 
 --teha left join, kus Employees tabelist DepartmentId on null
 select Name, Gender, Salary, DepartmentName
@@ -413,7 +413,7 @@ from Employees
 left join Department
 on Employees.DepartmentId = Department.Id
 where Department.Id is null
--- n‰itab ainult neid, kellel on vasakus tabelis (Employees)
+-- n√§itab ainult neid, kellel on vasakus tabelis (Employees)
 -- DepartmentId null
 
 select Name, Gender, Salary, DepartmentName
@@ -421,11 +421,11 @@ from Employees
 right join Department
 on Employees.DepartmentId = Department.Id
 where Employees.DepartmentId is null
---n‰itab ainult paremas tabelis olevat rida, 
+--n√§itab ainult paremas tabelis olevat rida, 
 --mis ei kattu Employees-ga.
 
 --full join
---mılema tabeli mitte-kattuvate v‰‰rtustega read kuvab v‰lja
+--m√µlema tabeli mitte-kattuvate v√§√§rtustega read kuvab v√§lja
 select Name, Gender, Salary, DepartmentName
 from Employees
 full join Department
@@ -437,18 +437,18 @@ or Department.Id is null
 --inner join, left join, right join, cross join ja full join
 --tabeleid sellesse andmebaasi juurde ei tohi teha
 
---Mınikord peab muutuja ette kirjutama tabeli nimetuse nagu on Product.Name,
+--M√µnikord peab muutuja ette kirjutama tabeli nimetuse nagu on Product.Name,
 --et editor saaks aru, et kummma tabeli muutujat soovitakse kasutada ja ei tekiks
 --segadust
 select Product.Name as [Product Name], ProductNumber, ListPrice, 
 ProductModel.Name as [Product Model Name], 
 Product.ProductModelId, ProductModel.ProductModelId
---mınikord peab ka tabeli ette kirjutama t‰psustama info
+--m√µnikord peab ka tabeli ette kirjutama t√§psustama info
 --nagu on SalesLt.Product
 from SalesLt.Product
 inner join SalesLt.ProductModel
---antud juhul Producti tabelis ProductModelId vıırvıti,
---mis ProductModeli tabelis on primaarvıti
+--antud juhul Producti tabelis ProductModelId v√µ√µrv√µti,
+--mis ProductModeli tabelis on primaarv√µti
 on Product.ProductModelId = ProductModel.ProductModelId
 
 --rida 412
@@ -464,7 +464,7 @@ select coalesce(NULL, 'No Manager') as Manager
 alter table Employees
 add ManagerId int
 
---neile, kellel ei ole ¸lemust, siis paneb neile No Manager teksti
+--neile, kellel ei ole √ºlemust, siis paneb neile No Manager teksti
 --kasutage left joini
 select  E.Name as Employee, isnull(M.Name, 'No Manager') as Manager
 from Employees E
@@ -472,13 +472,13 @@ left join Employees M
 on E.ManagerId = M.Id
 
 --kasutame inner joini
---kuvab ainult ManagerId all olevate isikute v‰‰rtuseid
+--kuvab ainult ManagerId all olevate isikute v√§√§rtuseid
 select E.Name as Employee, M.Name as Manager
 from Employees E
 inner join Employees M
 on E.ManagerId = M.Id
 
---kıik saavad kıikide ¸lemused olla
+--k√µik saavad k√µikide √ºlemused olla
 select E.Name as Employee, M.Name as Manager
 from Employees E
 cross join Employees M
@@ -533,7 +533,7 @@ update Employees
 set FirstName = NULL, MiddleName = NULL, LastName = 'Crowe'
 where Id = 10
 
---igast reast vıtab esimesena t‰idetud lahtri ja kuvab ainult seda
+--igast reast v√µtab esimesena t√§idetud lahtri ja kuvab ainult seda
 --coalesce
 select * from Employees
 select Id, coalesce(FirstName, MiddleName, LastName) as Name
@@ -566,37 +566,37 @@ values ('Ben', 'B@B.com'),
 select * from IndianCustomers
 select * from UKCustomers
 
---kasutame union all, mis n‰itab kıiki ridu
---union all ¸hendab tabelid ja n‰itab sisu
+--kasutame union all, mis n√§itab k√µiki ridu
+--union all √ºhendab tabelid ja n√§itab sisu
 select Id, Name, Email from IndianCustomers
 union all
 select Id, Name, Email from UKCustomers
 
---korduvate v‰‰rtustega read pannakse ¸hte ja ei korrata
+--korduvate v√§√§rtustega read pannakse √ºhte ja ei korrata
 select Id, Name, Email from IndianCustomers
 union
 select Id, Name, Email from UKCustomers
 
---kasutad union all, aga sorteerid nime j‰rgi
+--kasutad union all, aga sorteerid nime j√§rgi
 select Id, Name, Email from IndianCustomers
 union all
 select Id, Name, Email from UKCustomers
 order by Name
 
 --stored procedure
---tavaliselt pannakse nimetuse ette sp, mis t‰hendab stored procedure
+--tavaliselt pannakse nimetuse ette sp, mis t√§hendab stored procedure
 create procedure spGetEmployees
 as begin
 	select FirstName, Gender from Employees
 end
 
---n¸¸d saab kasutada selle nimelist sp-d
+--n√º√ºd saab kasutada selle nimelist sp-d
 spGetEmployees
 exec spGetEmployees
 execute spGetEmployees
 
 create proc spGetEmployeesByGenderAndDepartment
---@ t‰hendab muutujat
+--@ t√§hendab muutujat
 @Gender nvarchar(20),
 @DepartmentId int
 as begin
@@ -604,13 +604,13 @@ as begin
 	and DepartmentId = @DepartmentId
 end
 
---kui n¸¸d allolevat k‰sklust k‰ima panna, siis nıuab gender parameetrit
+--kui n√º√ºd allolevat k√§sklust k√§ima panna, siis n√µuab gender parameetrit
 spGetEmployeesByGenderAndDepartment
 
---ıige variant
+--√µige variant
 spGetEmployeesByGenderAndDepartment 'Female', 1
 
---niimoodi saab sp kirja pandud j'rjekorrast mˆˆda minna, kui ise paned muutuja paika
+--niimoodi saab sp kirja pandud j'rjekorrast m√∂√∂da minna, kui ise paned muutuja paika
 spGetEmployeesByGenderAndDepartment @DepartmentId = 1, @Gender = 'Male'
 
 ---saab vaadata sp sisu result vaates
@@ -635,7 +635,7 @@ as begin
 	select @EmployeeCount = count(Id) from Employees where Gender = @Gender
 end
 
---annab tulemuse, kus loendab ‰ra nıuetele vastavad read
+--annab tulemuse, kus loendab √§ra n√µuetele vastavad read
 --prindib ka tulemuse kirja teel
 --tuleb teha declare muutuja @TotlaCount, mis on int
 declare @TotalCount int
@@ -651,26 +651,26 @@ print @TotalCount
 
 --- 7 tund
 --- 17.03.2026
--- n‰itab ‰ra, mitu rida vastab nıuetele
+-- n√§itab √§ra, mitu rida vastab n√µuetele
 
--- deklareerime muutuja @TotalCount, mis on int andmet¸¸p
+-- deklareerime muutuja @TotalCount, mis on int andmet√º√ºp
 declare @TotalCount int
--- k‰ivitame stored procedure spGetEmployeeCountByGender, kus on parameetrid
+-- k√§ivitame stored procedure spGetEmployeeCountByGender, kus on parameetrid
 -- @EmployeeCount = @TotalCount out ja @Gender 
 execute spGetEmployeeCountByGender @EmployeeCount = @TotalCount out, @Gender = 'Female'
---prindib konsooli v‰lja, kui TotalCount on null vıi mitte null
+--prindib konsooli v√§lja, kui TotalCount on null v√µi mitte null
 print @TotalCount
 
 --sp sisu vaatamine
 sp_help spGetEmployeeCountByGender
 -- tabeli info vaatamine
 sp_help Employees
---kui soovid sp teksti n‰ha
+--kui soovid sp teksti n√§ha
 sp_helptext spGetEmployeeCountByGender
 
--- vaatame, millest sıltub meie valitud sp
+-- vaatame, millest s√µltub meie valitud sp
 sp_depends spGetEmployeeCountByGender
--- n‰itab, et sp sıltub Employees tabelist, kuna seal on count(Id) 
+-- n√§itab, et sp s√µltub Employees tabelist, kuna seal on count(Id) 
 -- ja Id on Employees tabelis
 
 --vaatame tabelit
@@ -691,16 +691,16 @@ as begin
 	select @TotalCount = count(Id) from Employees
 end
 
--- on vaja teha uus p‰ring, kus kasutame spTotalCount2 sp-d, 
+-- on vaja teha uus p√§ring, kus kasutame spTotalCount2 sp-d, 
 -- et saada tabeli ridade arv
 
--- tuleb deklareerida muutuja @TotalCount, mis on int andmet¸¸p
+-- tuleb deklareerida muutuja @TotalCount, mis on int andmet√º√ºp
 declare @TotalEmployees int
 --tuleb execute spTotalCount2, kus on parameeter @TotalEmployees
 exec spTotalCount2 @TotalEmployees output
 select @TotalEmployees
 
---mis Id all on keegi nime j‰rgi
+--mis Id all on keegi nime j√§rgi
 create proc spGetNameById1
 @Id int,
 @FirstName nvarchar(20) output
@@ -709,315 +709,327 @@ as begin
 end
 
 --annab tulemuse, kus id 1(seda numbrit saab muuta) real on keegi koos nimega
---print tuleb kasutada, et n‰idata tulemust
+--print tuleb kasutada, et n√§idata tulemust
 declare @FirstName nvarchar(20)
 execute spGetNameById1 3, @FirstName output
 print 'Name of the employee = ' + @FirstName
 
 --- tehke sama, mis eelmine, aga kasutage spGetNameById sp-d
---FirstName lıpus on outdeclare 
+--FirstName l]pus on outdeclare 
 declare @FirstName nvarchar(20)
 execute spGetNameById 1, @FirstName out
 print 'Name = ' + @FirstName
 
 --output tagastab muudetud read kohe p'ringu tulemsuena
---see on salvestatud protseduuris ja ¸he v‰‰rtuse tagastamine
---out ei anna mitte midagi, kui seda ei m‰‰ra execute k‰sus
+--see on salvestatud protseduuris ja √ºhe v√§√§rtuse tagastamine
+--out ei anna mitte midagi, kui seda ei m√§√§ra execute k√§sus
 
 --rida 668
 --tund 8
+--19.03.2026
+
 
 sp_help spGetNameById
 
 create proc spGetNameById2
 @Id int
 --kui on begin, siis on ka end kuskil olemas
-as begin 
-return (select FirstName from Employees where Id = @Id)
+as begin
+	return (select FirstName from Employees where Id = @Id)
 end
 
---tuleb veateade kuna kutsusime v‰lja int-i, aga Tom on nvarchar
+--tuleb veateade kuna kutsusime v√§lja int-i, aga Tom on nvarchar
 declare @EmployeeName nvarchar(50)
 execute @EmployeeName = spGetNameById2 1
 print 'Name of the employee = ' + @EmployeeName
 
 
 --sisseehitatud string funktsioonid
---see konverteerib ASCII t‰he v‰‰rtuse numbriks
+--see konverteerib ASCII t√§he v√§√§rtuse numbriks
 select ASCII('A')
 
-select char(122)
+select char(65)
 
---prindime kogu t‰hestiku v‰lja
-declare @start int = 97;
---kasutate while, et n‰idata kogu t‰hestik ette
-while @start <= 122
+--prindime kogu t√§hestiku v√§lja
+declare @Start int
+set @Start = 97
+--kasutate while, et n√§idata kogu t√§hestik ette
+while (@Start <= 122)
 begin
-   print char(@start)
-   set @start = @start + 1
+	select char (@Start)
+	set @Start = @Start + 1
 end
 
---eemaldame t¸hjad kohad sulgudes
-select ('                     Hello')
-select LTRIM('                     Hello')
+--eemaldema t√ºhjad kohad sulgudes
+select ('               Hello')
+select LTRIM('               Hello')
 
---t¸hikute eemaldamine veerust, mis on tabelis
-select LTRIM(FirstName), MiddleName, LastName from Employees
---eemaldage t¸hikud FirstName veerust ‰ra
+--t√ºhikute eemaldamine veerust, mis on tabelis
+select FirstName, MiddleName, LastName from Employees
+--eemaldage t√ºhikud FirstName veerust √§ra
+select ltrim(FirstName) as Name, MiddleName, LastName from Employees
 
---paremalt poolt t¸hjad stringid lıikab ‰ra
-select RTRIM('      Hello       ')
+--paremalt poolt t√ºhjad stringid l√µikab √§ra
+select rtrim('    Hello     ')
 
 --keerab kooloni sees olevad andmed vastupidiseks
---vastavalt loweriga ja upperiga saan muuta m‰rkide suurust
---reverse funktsioon pˆˆrab kık ¸mber
-select REVERSE(upper(ltrim(FirstName))) as FirstName, MiddleName, lower(LastName),
-RTRIM(LTRIM(FirstName)) + ' ' + MiddleName + ' ' + LastName as FullName
+--vastavalt lower-ga ja uppper-ga saan muuta m'rkide suurust
+--reverse funktsioon p√∂√∂rab k√µik √ºmber
+select Reverse(upper(ltrim(FirstName))) as FirstName, MiddleName, lower(LastName),
+rtrim(ltrim(FirstName)) + ' ' + MiddleName + ' ' + LastName as FullName
 from Employees
 
---left, right substring
---vasakult poolt neil esimest t‰hte
-select LEFT('ABCDEF', 4)
---paremalt poolt kolm t‰hte
+--left, right, substring
+--vasakult poolt neli esimest t√§hte
+select left('ABCDEF', 4)
+--paremalt poolt kolm t√§hte
 select right('ABCDEF', 3)
 
---kuvab @-t‰hem‰rgi asetust e mitmes on esitatud t‰hem‰rk
+--kuvab @-t√§hem√§rgi asetust e mitmes on @-m√§rk
 select CHARINDEX('@', 'sara@aaa.com')
 
---esimene nr peale komakohta n‰itab, et mitmendast alustab ja 
+--esimene nr peale komakohta n√§itab, et mitmendast alustab ja
 --siis mitu nr peale seda kuvada
 select SUBSTRING('pam@bbb.com', 5, 2)
 
---@ m‰rgist kuvab kolm t‰hem‰rki. Viimase numbri saa m‰‰rata pikkust
-select SUBSTRING('pam@bbb.com', CHARINDEX('@', 'pam@bbb.com') + 1, 3)
+-- @ - m√§rgist kuvab kolm t√§hem√§rki. Viimase nr saab m√§√§rata pikkust
+select SUBSTRING('pam@bbb.com', charindex('@', 'pam@bbb.com') + 1, 3)
 
---peale @ m‰rki hakkab kuvama tulemust, nr saab kaugust seadistada
-select SUBSTRING('pam@bbb.com', CHARINDEX('@', 'pam@bbb.com') + 2, 
-LEN('pam@bbb.com') - CHARINDEX('@', 'pam@bbb.com'))
+--peale @-m√§rki hakkab kuvama tulemust, nr saab kaugust seadistada
+select SUBSTRING('pam@bbb.com', charindex('@', 'pam@bbb.com') + 5,
+len('pam@bbb.com') - charindex('@', 'pam@bbb.com'))
 
 alter table Employees
 add Email nvarchar(20)
 
-update Employees set Email = 'Tom@aaa.com' where Id = 1;
-update Employees set Email = 'Pam@bbb.com' where Id = 2;
-update Employees set Email = 'John@aaa.com' where Id = 3;
-update Employees set Email = 'Sam@bbb.com' where Id = 4;
-update Employees set Email = 'Todd@bbb.com' where Id = 5;
-update Employees set Email = 'Ben@ccc.com' where Id = 6;
-update Employees set Email = 'Sara@ccc.com' where Id = 7;
-update Employees set Email = 'Valarie@aaa.com' where Id = 8;
-update Employees set Email = 'James@bbb.com' where Id = 9;
-update Employees set Email = 'Russel@bbb.com' where Id = 10;
+select * from Employees
 
---soovime teada saada deomeeninimesid emailides
-select SUBSTRING(Email, CHARINDEX('@', Email) + 1,
-len(Email) - charindex('@', Email)) as EmailDomain
+update Employees set Email = 'Tom@aaa.com' where Id = 1
+update Employees set Email = 'Pam@bbb.com' where Id = 2
+update Employees set Email = 'John@aaa.com' where Id = 3
+update Employees set Email = 'Sam@bbb.com' where Id = 4
+update Employees set Email = 'Todd@bbb.com' where Id = 5
+update Employees set Email = 'Ben@ccc.com' where Id = 6
+update Employees set Email = 'Sara@ccc.com' where Id = 7
+update Employees set Email = 'Valarie@aaa.com' where Id = 8
+update Employees set Email = 'James@bbb.com' where Id = 9
+update Employees set Email = 'Russel@bbb.com' where Id = 10
+
+--soovime teada saada domeeninimesid emailides
+select SUBSTRING (Email, charindex('@', Email) + 1,
+len (Email) - charindex('@', Email)) as EmailDomain
 from Employees
 
---alates teisest t‰hest emailis kuni @ m‰rgini on t‰rnid
-SELECT FirstName, LastName,
-substring(Email, 1, 2) + replicate('*', 5) +
-substring(Email, charindex('@', Email), len(Email) - charindex('@', Email)+1) as Email
+--alates teisest t√§hest emailis kuni @ m√§rgini on t√§rnid
+select FirstName, LastName,
+	substring(Email, 1, 2) + replicate('*', 5) +
+	substring(Email, charindex('@', Email), len(Email) - charindex('@', Email)+1) as Email
 from Employees
 
---kolm korda n‰itab stringis olevat v‰‰rtust
-select REPLICATE('asd', 3)
+--kolm korda n√§itab stringis olevat v√§√§rtust
+select replicate('asd', 3)
 
---t¸hiku sisestamine
-select SPACE(5)
+--t√ºhiku sisestamine
+select space(5)
 
---t¸hiku sisestamine FirstName ja LastName vahele
-select FirstName + SPACE(25) + LastName as FullName
+--t√ºhiku sisestamine FirstName ja LastName vahele
+select FirstName + space(25) + LastName as FullName
 from Employees
 
---PATINDEX
---sama, mis charindex, aga d¸naamilisem ja saab kasutada wildcardi
+---PATINDEX
+-- sama, mis charindex, aga d√ºnaamilisem ja saab kasutada wildcardi
 select Email, PATINDEX('%@aaa.com', Email) as FirstOccurence
 from Employees
 where PATINDEX('%@aaa.com', Email) > 0
---leian kıik selle domeeni esindajad ja alates mitmendas m‰rgist algab @
+--leian k]ik selle domeeni esindajad ja alates mitmendast m√§rgist algab @
 
---kıik .com emailid asendab .net
-SELECT Email, REPLACE(Email, '.com', '.net') as ConvertedEmail
-FROM Employees
+--k]ik .com emailid asendab .net-ga
+select Email, replace(Email, '.com', '.net') as ConvertedEmail
+from Employees
 
---soovin asendada peale esimest m‰rki kolm t‰hte viie t‰rniga
-SELECT FirstName, LastName, Email,
-STUFF(Email, 2, 3, '*****') as StuffedEmail
+--soovin asendada peale esimest m'rki kolm t√§hte viie t√§rniga
+select FirstName, LastName, Email,
+	stuff(Email, 2, 3, '*****') as StuffedEmail
 from Employees
 
 create table DateTime
 (
-c_time time,
-c_date date,
-c_smalldatetime smalldatetime,
-c_datetime datetime,
-c_datetime2 datetime2,
-c_datetimeoffset datetimeoffset
+	c_time time,
+	c_date date,
+	c_smalldatetime smalldatetime,
+	c_datetime datetime,
+	c_datetime2 datetime2,
+	c_datetimeoffset datetimeoffset
 )
 
 select * from DateTime
 
 --konkreetse masina kellaaeg
-select getdate(), 'GETDATE'
+select getdate(), 'GETDATE()'
 
 insert into DateTime
-values (GETDATE(), GETDATE(), GETDATE(), GETDATE(), GETDATE(), GETDATE())
+values (getdate(), getdate(), getdate(), getdate(), getdate(), getdate())
+
 select * from DateTime
 
 update DateTime set c_datetimeoffset = '2026-04-08 14:49:28.1933333 +10:00'
 where c_datetimeoffset = '2026-03-19 14:25:09.8900000 +00:00'
 
-select CURRENT_TIMESTAMP, ' CURRENT_TIMESTAMP' --aja p‰ring
-select SYSDATETIME(), 'SYSDATETIME' --veel t‰psem aja p‰ring
-SELECT SYSDATETIMEOFFSET(), 'SYSDATETIMEOFFSET' --t‰pne aeg koos ajalise nihkega
-select GETUTCDATE(), 'GETUTCDATE' --UTC aeg
+select CURRENT_TIMESTAMP, 'CURRENT_TIMESTAMP' --aja p√§ring
+select SYSDATETIME(), 'SYSDATETIME' --veel t√§psem aja p√§ring
+select SYSDATETIMEOFFSET(), 'SYSDATETIMEOFFSET' --t'pne aeg koos ajalise nihkega
+select GETUTCDATE(), 'GETUTCDATE' ---UTC aeg
 
---saab kontrollida, kas on ıige andmet¸¸p
-select ISDATE('asd') --tagastab 0 kuna string ei ole date
-select ISDATE(GETDATE()) --kuidas saada vastuseks 1 isdate puhul?
-select ISDATE('2026-04-08 14:49:28.1933333') --tagastab 0 kuna max kolm komakohta vıib olla
-select ISDATE('2026-04-08 14:49:28.193') --tagastab 1
-select DAY(GETDATE()) --annab t‰nase p‰eva nr
-select DAY('01/24/2026') --annab stringis oleva kp ja j‰rjestus peab olema ıige
-select month(GETDATE()) --annab jooksva kuu nr
-select month('01/24/2026') --annab stringis oleva kuu ja j‰rjestus peab olema ıige
-select year(GETDATE()) --annab t‰nase aasta nr
-select year('01/24/2026') --annab stringis oleva aasta ja j‰rjestus peab olema ıige
+--saab kontrollida, kas on √µige andmet√º√ºp
+select isdate('asd') -- tagastab 0 kuna string ei ole date
+select isdate(GETDATE()) -- kuidas saada vastuseks 1 isdate puhul?
+select isdate('2026-04-08 14:49:28.193333') --tagastab 0 kuna max kolm komakohta v√µib olla
+select isdate('2026-04-08 14:49:28.193') --tagastab 1
+select DAY(GETDATE()) --annab t√§nase p√§eva nr
+select DAY('01/24/2026') --annab stringis oleva kp ja j√§rjestus peab olema √µige
+select Month(GETDATE()) --annab jooksva kuu nr
+select Month('01/24/2026') --annab stringis oleva kuu ja j√§rjestus peab olema √µige
+select YEAR(GETDATE()) --annab jooksva aasta nr
+select YEAR('01/24/2026') --annab stringis oleva aasta ja j√§rjestus peab olema √µige
 
-select DATENAME(DAY, '2026-04-08 14:49:28.1933333') --annab stringis oleva p‰eva nr
-select DATENAME(WEEKDAY, '2026-04-08 14:49:28.1933333') --annab stringis oleva p‰eva sınana
-select DATENAME(MONTH, '2026-04-08 14:49:28.1933333') --annab stringis oleva kuu sınana
+select datename(day, '2026-04-08 14:49:28.193') --annab stringis oleva p√§eva nr
+select datename(weekday, '2026-04-08 14:49:28.193') --annab stringis oleva p√§eva s√µnana
+select datename(month, '2026-04-08 14:49:28.193') --annab stringis oleva kuu s√µnana
 
 create table EmployeesWithDates
 (
-Id nvarchar(2),
-Name nvarchar(20),
-DateOfBirth datetime
+	Id nvarchar(2),
+	Name nvarchar(20),
+	DateOfBirth datetime
 )
 
-INSERT INTO EmployeesWithDates (Id, Name, DateOfBirth) VALUES 
-('1', 'Sam', '1980-12-30 00:00:00'),
-('2', 'Pam', '1982-03-21 3:38:26'),
-('3', 'John', '1985-08-21 20:33:36'),
-('4', 'Sara', '1979-11-29 12:59:30.67'),
-('5', 'Todd', '1978-11-29 12:59:30.67')
+INSERT INTO EmployeesWithDates  (Id, Name, DateOfBirth)  
+VALUES (1, 'Sam', '1980-12-30 00:00:00.000');
+INSERT INTO EmployeesWithDates  (Id, Name, DateOfBirth)  
+VALUES (2, 'Pam', '1982-09-01 12:02:36.260');
+INSERT INTO EmployeesWithDates  (Id, Name, DateOfBirth)  
+VALUES (3, 'John', '1985-08-22 12:03:30.370');
+INSERT INTO EmployeesWithDates  (Id, Name, DateOfBirth)  
+VALUES (4, 'Sara', '1979-11-29 12:59:30.670');
 
-select * from EmployeesWithDates                                                                              
+select * from EmployeesWithDates
 truncate table EmployeesWithDates
--- tund 9
+--- rida 861
+--- tund 9
 
---kuidas vıtta ¸hest veerust andmeid ja selle abil luua uued veerud
-
---vaatab DoB veerust p‰eva ja kuvab p‰eva nimetuse sınana
-select Name, DateOfBirth, DATENAME(WEEKDAY, DateOfBirth) as [Day],
-
---vaatab VoB veerust kuup‰evasid ja kuvab kuu nr
-month(DateOfBirth) as MoNtNumber,
-
---vaatab DoB veerust kuud ja kuvab sınana
-DATENAME(MONTH, DateOfBirth) as [MonthName],
-
---vıtab DoB veerust aasta
-YEAR(DateOfBirth) as [Year]
+--kuidas v√µtta √ºhest veerust andmeid ja selle abil luua uued veerud
+ 
+--vaatab DoB veerust p√§eva ja kuvab p√§eva nimetuse s√µnana
+select Name, DateOfBirth, Datename(weekday, DateOfBirth) as [Day],
+	--vaatab VoB veerust kuup√§evasid ja kuvab kuu nr 
+	Month(DateOfBirth) as MonthNumber,
+	--vaatab DoB veerust kuud ja kuvab s√µnana
+	DateName(Month, DateOfBirth) as [MonthName], 
+	--v√µtab DoB veerust aasta
+	Year(DateOfBirth) as [Year]
 from EmployeesWithDates
 
---kuvab 3 kuna USA n‰dal algab p¸hap‰evaga
-select DATEPART(WEEKDAY, '2026-03-24 13:13:30.67')
---tehke sama, aga kasutage kuud
-select DATEPART(month, '2026-03-24 13:13:30.67')
---lidab stringis olevale kp 20 p‰eva juurde
-select dateadd(DAY, 20,  '2026-03-24 13:13:30.67')
---sama asi, aga lahutab 20 p‰eva
-select dateadd(DAY, -20,  '2026-03-24 13:13:30.67')  
---kuvab kahe stringis oleva kuudevahelist aega numbrina
+--kuvab 3 kuna USA n√§dal algab p√ºhap√§evaga
+select Datepart(weekday, '2026-03-24 12:59:30.670')
+--tehke sama, aga kasutage kuu-d
+select Datepart(month, '2026-03-24 12:59:30.670')
+--liidab stringis olevale kp 20 p'eva juurde
+select Dateadd(day, 20, '2026-03-24 12:59:30.670')
+--lahutab 20 p√§eva maha
+select Dateadd(day, -20, '2026-03-24 12:59:30.670')
+--kuvab kahe stringis oleva kuudevahelist aega nr-na
 select datediff(month, '11/20/2026', '01/20/2024')
 --tehke sama, aga kasutage aastat
 select datediff(year, '11/20/2026', '01/20/2028')
 
---alguses uurite mis on funktsioon MS SQL
--- eelkirjutatud toimingud, alvestatud tegevus
---miks seda on vaja
---pakkuda DB korduvkasutatud funktsionaalsust
---mis on selle eelised ja puudused
+-- alguses uurite, mis on funktsioon MS SQL
+-- eelkirjutatud toimingud, salvestatud tegevus
+-- miks seda on vaja
+--pakkuda DB-s korduvkasutatud funktsionaalsust
+-- mis on selle eelised ja puudused
 --saad kiiresti kasutada toiminguid ja ei pea uuesti koodi kirjutama
 --funktsioon ei tohi muuta DB olekut
 
 create function fnComputeAge(@DOB datetime)
 returns nvarchar(50)
 as begin
-    declare @tempdate datetime, @years int, @months int, @days int
-    select @tempdate = @DOB
+	declare @tempdate datetime, @years int, @months int, @days int
+	select @tempdate = @DOB
 
-	select @years = DATEDIFF(YEAR, @tempdate, GETDATE()) - case when (MONTH(@DOB) >
-	MONTH(getdate())) or (MONTH(@DOB) = MONTH(getdate()) and DAY(@DOB) > DAY(GETDATE()))
+	select @years = datediff(year, @tempdate, getdate()) - case when (month(@DOB) >
+	month(getdate())) or (month(@DOB) = month(getdate()) and day(@DOB) > day(getdate()))
 	then 1 else 0 end
-	select @tempdate = DATEADD(YEAR, @Years, @tempdate)
+	select @tempdate = dateadd(year, @Years, @tempdate)
 
-	select @months = DATEDIFF(MONTH, @tempdate, GETDATE()) - case when DAY(@DOB) > DAY(GETDATE()) then 1 else 0 end
-	select @tempdate = DATEADD(MONTH, @months, @tempdate)
+	select @months = datediff(month, @tempdate, getdate()) - case when day(@DOB) > day(getdate()) 
+	then 1 else 0 end
+	select @tempdate = dateadd(MONTH, @months, @tempdate)
 
-	select @days = DATEDIFF(DAY, @tempdate, GETDATE())
+	select @days = datediff(day, @tempdate, getdate())
 
 	declare @Age nvarchar(50)
-	    set @Age = CAST(@years as nvarchar(4)) + ' Years ' + CAST(@months as nvarchar(2))
-		+ ' Months ' + CAST(@days as nvarchar(2)) + ' Days old '
-		return @Age
+		set @Age = cast(@years as nvarchar(4)) + ' Years ' + cast(@months as nvarchar(2))
+		+ ' Months ' + cast(@days as nvarchar(2)) + ' Days old '
+	return @Age
 end
 
 select Id, Name, DateOfBirth, dbo.fnComputeAge(DateOfBirth) as Age from EmployeesWithDates
 
+--rida 902
 --tund 10
+--31.03.2026
 
---kui kasutame seda funktsiooni, siis saame teada t‰nase p‰eva vahet stringis v‰lja tooduga
-select dbo.fnComputeAge('02/24/2010') as age
+--kui kasutame seda funktsiooni, siis saame teada t√§nase p√§eva vahet stringis v√§lja tooduga
+select dbo.fnComputeAge('02/24/2010') as Age
 
---nr peale DOB muutujat n‰itab, et mismoodi kuvada DOB-d
+-- nr peale DOB muutujat n√§itab, et mismoodi kuvada DOB-d
 select Id, Name, DateOfBirth,
-CONVERT(nvarchar, DateOfBirth, 109) as ConvertedDOB
+convert(nvarchar, DateOfBirth, 108) as ConvertedDOB
 from EmployeesWithDates
 
-select Id, Name, Name + ' - ' + CAST(Id as nvarchar) as [Name-Id] 
-from EmployeesWithDates
+select Id, Name, Name + ' - ' + cast(Id as nvarchar) as [Name-Id] from EmployeesWithDates
 
-select CAST(GETDATE() as date) --t‰nane kp
-
---t‰nane kp, aga kasutate convert-i, et kuvada stringi
-select CONVERT(date, GETDATE())
+select cast(getdate() as date) --t√§nane kp
+--t√§nane kp, aga kasutate convert-i, et kuvada stringina
+select convert(date, getdate())
 
 --matemaatilised funktsioonid
-select ABS(-5) --abs on absoluutv‰‰rtusega number ja tulemuseks saame positiivse arvu
-select CEILING(4.2) --ceiling on funktsioon, mis ¸mardab ¸lespoole ja tulemuseks saame 5
-select CEILING(-4.2) --ceiling ¸mardab ka miinus numbrid ¸lespoole, mis t‰hendab, et saame -4
-select FLOOR(15.2) --floor on funktsioon, mis ¸mardab alla, mis t‰hendab, et saame 15
-select FLOOR(-15.2) --floor on funktsioon, mis ¸mardab alla, mis t‰hendab, et saame -15
-select POWER(2, 4) --kaks astems 4 ehk siis ruudus
-select SQUARE(9) --antud juhul 9 ruudus 
-select SQRT(16) --antud juhul 16 ruutjuur
+select ABS(-5) --abs on absoluutv√§√§rtusega number ja tulemuseks saame ilma miinus m√§rgita 5
+select CEILING(4.2) --ceiling on funktsioon, mis √ºmardab √ºlespoole ja tulemuseks saame 5
+select CEILING(-4.2) --ceiling √ºmardab ka miinus numbrid √ºlespoole, mis t√§hendab, et saame -4
+select floor(15.2) --floor on funktsioon, mis √ºmardab alla ja tulemuseks saame 15
+select floor(-15.2) --floor √ºmardab ka miinus numbrid alla, mis t√§hendab, et saame -16
+select power(2, 4) --kaks astmes neli
+select square(9) --antud juhul 9 ruudus
+select sqrt(16) --antud juhul 16 ruutjuur
 
-select RAND() --rand on funktsioon, mis genereerib
+select rand() --rand on funktsioon, mis genereerib 
 --juhusliku numbri vahemikus 0 kuni 1
+--kuidas saada t√§isnumber iga kord
+select floor(rand() * 100) --korrutab sajaga iga suvalise numbri
 
---kuidas saada t‰isnumber iga kord
-select FLOOR(RAND() * 100) --korrutab 100 iga numbri ja ¸mardab
-
---iga kord n‰itab 10 suvalist numbrit
+--iga kord n√§itab 10 suvalist numbrit
 declare @counter int
 set @counter = 1
 while (@counter <= 10)
 begin
-    print floor(rand() * 100)
-    set @counter = @counter + 1
+	print floor(rand() * 100)
+	set @counter = @counter + 1
 end
 
-select ROUND(850.556, 2) --round on funktsioon, mis ¸mardab kaks komakohta
+select ROUND(850.556, 2) 
+--round on funktsioon, mis √ºmardab kaks komakohta 
 --ja tulemuseks saame 850.56
-select ROUND(850.556, 2, 1) --round on funktsioon, mis ¸mardab kaks komakohta ja
---kui kolmas parameeter on 1, siis ¸mardab alla
-select ROUND(850.556, 1) --¸mardab ¸he komakoha
-select ROUND(850.556, 1, 1) --¸mardab alla ¸he komakoha pealt
-select ROUND(850.556, -2) --¸mardab t‰isnr ¸lessepoole
-select ROUND(850.556, -1) --¸mardab t‰isnr alla
+select ROUND(850.556, 2, 1) 
+--round on funktsioon, mis √ºmardab kaks komakohta ja 
+--kui kolmas parameeter on 1, siis √ºmardab alla
+select ROUND(850.556, 1)
+--round on funktsioon, mis √ºmardab √ºhe komakoha ja
+--tulemuseks saame 850.6
+select ROUND(850.556, 1, 1) --√ºmardab alla √ºhe komakoha pealt 
+--ja tulemuseks saame 850.5
+select ROUND(850.556, -2) --√ºmardab t√§isnr √ºlessepoole ja tulemus on 900
+select ROUND(850.556, -1) --√ºmardab t√§isnr alla ja tulemus on 850
 
 ---
 create function dbo.CalculateAge(@DOB date)
@@ -1025,26 +1037,28 @@ returns int
 as begin 
 declare @Age int
 
-set @Age = DATEDIFF(YEAR, @DOB, GETDATE()) - 
-case 
-    when (MONTH(@DOB) > MONTH(GETDATE())) or
-	     (MONTH(@DOB) = MONTH(GETDATE()) and DAY(@DOB) > DAY(GETDATE()))
-	then 1 else 0 end
+	set @Age = DATEDIFF(year, @DOB, GETDATE()) - 
+	case 
+		when (MONTH(@DOB) > MONTH(GETDATE())) or 
+			 (MONTH(@DOB) = MONTH(GETDATE()) and DAY(@DOB) > DAY(GETDATE())) 
+			 then 1 else 0 end
 	return @Age
 end
 
---kui tehtud, siis proovige funktsiooni ja vaadake, kas annab ıige vanuse
+--kui valmis, siis proovige seda funktsiooni 
+--ja vaadake, kas annab √µige vanuse
 exec dbo.CalculateAge '1980-12-30'
 
---arvutab v‰lja, kui vana on isik ja vıtab arvesse kuud ning p‰evad
---antud juhul n‰itab kıike, kes on ¸le 36 a vanad
-select Id, dbo.CalculateAge(DateOfBirth) as Age from EmployeesWithDates
+--arvutab v√§lja, kui vana on isik ja v√µtab arvesse kuud ning p√§evad
+--antud juhul n√§itab k√µike, kes on √ºle 36 a vanad
+select Id, Name,  dbo.CalculateAge(DateOfBirth) as Age from EmployeesWithDates
 where dbo.CalculateAge(DateOfBirth) > 36
 
---tund 11
---02.04.2026
+--- rida 970
+--- tund 11
+--- 02.04.2026
 
--- inline table valued functions
+--- inline table valued functions
 alter table EmployeesWithDates
 add DepartmentId int
 alter table EmployeesWithDates
@@ -1052,36 +1066,39 @@ add Gender nvarchar(10)
 
 select * from EmployeesWithDates
 
-update EmployeesWithDates
-set DepartmentId = 1,
-    Gender = 'Male'
-where Id = 5;
+update EmployeesWithDates set Gender = 'Male', DepartmentId = 1
+where Id = 1
+update EmployeesWithDates set Gender = 'Female', DepartmentId = 2
+where Id = 2
+update EmployeesWithDates set Gender = 'Male', DepartmentId = 1
+where Id = 3
+update EmployeesWithDates set Gender = 'Female', DepartmentId = 3
+where Id = 4
+insert into EmployeesWithDates (Id, Name, DateOfBirth, DepartmentId, Gender)
+values (5, 'Todd', '1978-11-29 12:59:30.670', 1, 'Male')
 
---scalar funktsioon annab mingis vahemikus olevaid andmeid,
---inline table values ei kasuta begin ja end funktsioone
---scalar annab v‰‰rtused ja inline annab tabeli
-
+-- scalar function annab mingis vahemikus olevaid andmeid, 
+-- inline table values ei kasuta begin ja end funktsioone
+-- scalar annab v√§√§rtused ja inline annab tabeli
 create function fn_EmployeesByGender(@Gender nvarchar(10))
 returns table
 as
-return (select Id, Name, DateOfbirth, DepartmentId, Gender
-from EmployeesWithDates
-where Gender = @Gender)
+return (select Id, Name, DateOfBirth, DepartmentId, Gender
+		from EmployeesWithDates
+		where Gender = @Gender)
 
---kuidas leida kıik naised tabelis EmployeesWithDates
---ja kasutada funktsiooni fn_EmployeeByGender
+--kuidas leida k√µik naised tabelis EmployeesWithDates
+-- ja kasutada funktsiooni fn_EmployeesByGender
+select * from fn_EmployeesByGender('female')
 
-select * from fn_EmployeesByGender('Female')
-
---tahaks ainult Pami nime n‰ha
-
-select * from fn_EmployeesByGender('Female')
+--tahaks ainult Pami nime n√§ha
+select * from fn_EmployeesByGender('female')
 where Name = 'Pam'
 
 select * from Department
 
---kahest erinevast tabelist andmete vıtmine ja 
---koos kuvamine
+--kahest erinevast tabelist andmete v√µtmine ja 
+--koos kuvamine 
 --esimene on funktsioon ja teine tabel
 
 select Name, Gender, DepartmentName
@@ -1092,9 +1109,9 @@ join Department D on D.Id = E.DepartmentId
 --inline funktsioon
 create function fn_GetEmployees()
 returns table as
-return (Select Id, Name, CAST(DateOfBirth as date)
-       as DOB
-       from EmployeesWithDates)
+return (select Id, Name, cast(DateOfBirth as date)
+		as DOB
+		from EmployeesWithDates)
 
 select * from fn_GetEmployees()
 
@@ -1104,30 +1121,612 @@ select * from fn_GetEmployees()
 create function fn_MS_GetEmployees()
 returns @Table Table (Id int, Name nvarchar(20), DOB date)
 as begin
-insert into @Table
-select Id, Name, CAST(DateOfBirth as date) from EmployeesWithDates
-return
+	insert into @Table
+	select Id, Name, CAST(DateOfBirth as date) from EmployeesWithDates
+	return
 end
 
 select * from fn_MS_GetEmployees()
 
---inline tabeli funktsioonid on paremini tˆˆtamas kuna k‰sitletakse vaatena
---multi puhul on pm tegemist stored proceduriga ja kulutab ressurssi rohkem
+--- inline tabeli funktsioonid on paremini t√∂√∂tamas kuna k√§sitletakse vaatena
+--- multi puhul on pm tegemist stored proceduriga ja kulutab ressurssi rohkem
 
---muudame andmeid ja vaatame, kas inline funktsioonis on muutused kajastatud
-update fn_GetEmployees() set Name = 'Sam1' where Id = 1
-select * from fn_GetEmployees() --saab muuta
+--	muudame andmeid ja vaatame, kas inline funktsioonis on muutused kajastatud
+update fn_GetEmployees() set Name = 'Sam1' where Id = 1 
+select * from fn_GetEmployees() --saab muuta andmeid
 
-update fn_Ms_GetEmployees() set Name = 'Sam2' where Id = 1
---ei saa muuta andmeid multi state funktsionis,
---kuna see on nagu stored procedure
+update fn_MS_GetEmployees() set Name = 'Sam2' where Id = 1
+--	ei saa muuta andmeid multi state funktsioonis, 
+--	kuna see on nagu stored procedure
 
 --deterministic vs non-deterministic functions
 --deterministic funktsioonid annavad alati sama tulemuse, kui sisend on sama
-select COUNT(*) from EmployeesWithDates
+select count(*) from EmployeesWithDates
 select SQUARE(4)
 
 --non-deterministic funktsioonid annavad erineva tulemuse, kui sisend on sama
-select GETDATE()
+select getdate()
 select CURRENT_TIMESTAMP
-select RAND()
+select rand()
+
+--- rida 1056
+--- tund 12
+--- 16.04.26
+
+
+--loome funktsiooni
+create function fn_GetNameById(@id int)
+returns nvarchar(30)
+as begin
+	return (select Name from EmployeesWithDates where Id = @id)
+end
+
+---kasutame funktsiooni, leides Id 1 all oleva inimene
+select dbo.fn_GetNameById(1)
+
+select * from EmployeesWithDates
+
+--saab n√§ha funktsiooni sisu
+sp_helptext fn_GetNameById
+
+--n√º√ºd muudate funktsiooni nimega fn_GetNameById
+--ja panete sinna encryption, et keegi peale teie ei saaks sisu n√§ha
+alter function fn_GetNameById(@Id int)
+returns nvarchar(30)
+with encryption
+as begin
+	return (select Name from EmployeesWithDates where Id = @id)
+end
+
+--kui n√º√ºd sp_helptexti kasutada, siis ei n√§e funktsiooni sisu
+sp_helptext fn_GetNameById
+
+--kasutame schemabindingut, et n√§ha, mis on funktsiooni sisu
+alter function dbo.fn_GetNameById(@Id int)
+returns nvarchar(30)
+with schemabinding
+as begin
+	return (select Name from dbo.EmployeesWithDates where Id = @id)
+end
+--schemabinding t√§hendab, et kui keegi √ºritab muuta EmployeesWithDates 
+--tabelit, siis ei lase seda teha, kuna see on seotud 
+--fn_GetNameById funktsiooniga
+
+--ei saa kustutada ega muuta tabelit EmployeesWithDates, 
+--kuna see on seotud fn_GetNameById funktsiooniga
+drop table dbo.EmployeesWithDates
+
+
+---temporary tables
+--see on olemas ainult selle sessiooni jooksul
+--kasutatakse # s√ºmbolit, et saada aru, et tegemist on temporary tabeliga
+create table #PersonDetails (Id int, Name nvarchar(20))
+
+insert into #PersonDetails values (1, 'Sam')
+insert into #PersonDetails values (2, 'Pam')
+insert into #PersonDetails values (3, 'John')
+
+select * from #PersonDetails
+
+--temporary tabelite nimekirja ei n√§e, kui kasutada sysobjects 
+--tabelit, kuna need on ajutised
+select Name from sysobjects
+where name like '#PersonDetails%'
+
+--kustutame temporary tabeli
+drop table #PersonDetails
+
+--loome sp, mis loob temporary tabeli ja paneb sinna andmed
+create proc spCreateLocalTempTable
+as begin
+create table #PersonDetails (Id int, Name nvarchar(20))
+
+insert into #PersonDetails values (1, 'Sam')
+insert into #PersonDetails values (2, 'Pam')
+insert into #PersonDetails values (3, 'John')
+
+select * from #PersonDetails
+end
+---
+exec spCreateLocalTempTable
+
+--globaalne temp tabel on olemas kogu 
+--serveris ja k√µigile kasutajatele, kes on √ºhendatud
+create table ##GlobalPersonDetails (Id int, Name nvarchar(20))
+
+--index
+create table EmployeeWithSalary
+(
+	Id int primary key,
+	Name nvarchar(20),
+	Salary int,
+	Gender nvarchar(10)
+)
+
+insert into EmployeeWithSalary values(1, 'Sam', 2500, 'Male')
+insert into EmployeeWithSalary values(2, 'Pam', 6500, 'Female')
+insert into EmployeeWithSalary values(3, 'John', 4500, 'Male')
+insert into EmployeeWithSalary values(4, 'Sara', 5500, 'Female')
+insert into EmployeeWithSalary values(5, 'Todd', 3100, 'Male')
+
+select * from EmployeeWithSalary
+
+--otsime inimesi, kelle palgavahemik on 5000 kuni 7000
+select * from EmployeeWithSalary
+where Salary between 5000 and 7000
+
+--loome indeksi Salary veerule, et kiirendada otsingut
+--mis asetab andmed Salary veeru j√§rgi j√§rjestatult
+create index IX_EmployeeSalary 
+on EmployeeWithSalary(Salary asc)
+
+--saame teada, et mis on selle tabeli primaarv√µti ja index
+exec sys.sp_helpindex @objname = 'EmployeeWithSalary'
+
+--tahaks IX_EmployeeSalary indeksi kasutada, et otsing oleks kiirem
+select * from EmployeeWithSalary
+where Salary between 5000 and 7000
+
+--n√§itab, et kasutatakse indeksi IX_EmployeeSalary, 
+--kuna see on j√§rjestatud Salary veeru j√§rgi
+select * from EmployeeWithSalary with (index(IX_EmployeeSalary))
+
+--indeksi kustutamine
+drop index IX_EmployeeSalary on EmployeeWithSalary --1 variant
+drop index EmployeeWithSalary.IX_EmployeeSalary --2 variant
+
+---- indeksi t√º√ºbid:
+--1. Klastrites olevad
+--2. Mitte-klastris olevad
+--3. Unikaalsed
+--4. Filtreeritud
+--5. XML
+--6. T√§istekst
+--7. Ruumiline
+--8. Veerus√§ilitav
+--9. Veergude indeksid
+--10. V√§lja arvatud veergudega indeksid
+
+-- klastris olev indeks m√§√§rab √§ra tabelis oleva f√º√ºsilise j√§rjestuse 
+-- ja selle tulemusel saab tabelis olla ainult √ºks klastris olev indeks
+
+create table EmployeeCity
+(
+	Id int primary key,
+	Name nvarchar(20),
+	Salary int,
+	Gender nvarchar(10),
+	City nvarchar(50)
+)
+
+exec sp_helpindex EmployeeCity
+
+-- andmete √µige j√§rjestuse loovad klastris olevad indeksid 
+-- ja kasutab selleks Id nr-t
+-- p√µhjus, miks antud juhul kasutab Id-d, tuleneb primaarv√µtmest
+insert into EmployeeCity values(3, 'John', 4500, 'Male', 'New York')
+insert into EmployeeCity values(1, 'Sam', 2500, 'Male', 'London')
+insert into EmployeeCity values(4, 'Sara', 5500, 'Female', 'Tokyo')
+insert into EmployeeCity values(5, 'Todd', 3100, 'Male', 'Toronto')
+insert into EmployeeCity values(2, 'Pam', 6500, 'Male', 'Sydney')
+
+-- klastris olevad indeksid dikteerivad s√§ilitatud andmete j√§rjestuse tabelis 
+-- ja seda saab klastrite puhul olla ainult √ºks
+
+select * from EmployeeCity
+create clustered index IX_EmployeeCityName
+on EmployeeCity(Name)
+--p√µhjus, miks ei saa luua klastris olevat 
+--indeksit Name veerule, on see, et tabelis on juba klastris 
+--olev indeks Id veerul, kuna see on primaarv√µti
+
+--loome composite indeksi, mis t√§hendab, et see on mitme veeru indeks
+--enne tuleb kustutada klastris olev indeks, kuna composite indeks 
+--on klastris olev indeksi t√º√ºp
+create clustered index IX_EmployeeGenderSalary
+on EmployeeCity(Gender desc, Salary asc)
+-- kui teed select p√§ringu sellele tabelile, siis peaksid n√§gema andmeid, 
+-- mis on j√§rjestatud selliselt: Esimeseks v√µetakse aluseks Gender veerg 
+-- kahanevas j√§rjestuses ja siis Salary veerg t√µusvas j√§rjestuses
+
+select * from EmployeeCity
+
+--mitte klastris olev indeks on eraldi struktuur, 
+--mis hoiab indeksi veeru v√§√§rtusi
+create nonclustered index IX_EmployeeCityName
+on EmployeeCity(Name)
+--kui n√º√ºd teed select p√§ringu, siis n√§ed, et andmed on 
+--j√§rjestatud Id veeru j√§rgi
+select * from EmployeeCity
+
+--- erinevused kahe indeksi vahel
+--- 1. ainult √ºks klastris olev indeks saab olla tabeli peale, 
+--- mitte-klastris olevaid indekseid saab olla mitu
+--- 2. klastris olevad indeksid on kiiremad kuna indeks peab tagasi 
+--- viitama tabelile juhul, kui selekteeritud veerg ei ole olemas indeksis
+--- 3. Klastris olev indeks m√§√§ratleb √§ra tabeli ridade slavestusj√§rjestuse
+--- ja ei n√µua kettal lisa ruumi. Samas mitte klastris olevad indeksid on 
+--- salvestatud tabelist eraldi ja n√µuab lisa ruumi
+
+create table EmployeeFirstName
+(
+	Id int primary key,
+	FirstName nvarchar(20),
+	LastName nvarchar(20),
+	Salary int,
+	Gender nvarchar(10),
+	City nvarchar(50)
+)
+
+exec sp_helpindex EmployeeFirstName
+
+insert into EmployeeFirstName values(1, 'John', 'Smith', 4500, 'Male', 'New York')
+insert into EmployeeFirstName values(1, 'Mike', 'Sandoz', 2500, 'Male', 'London')
+
+drop index EmployeeFirstName.PK__Employee__3214EC07EFD14A37
+--- kui k√§ivitad √ºlevalpool oleva koodi, siis tuleb veateade
+--- et SQL server kasutab UNIQUE indeksit j√µustamaks v√§√§rtuste 
+--- unikaalsust ja primaarv√µtit koodiga Unikaalseid Indekseid 
+--- ei saa kustutada, aga k√§sitsi saab
+
+create unique nonclustered index UIX_Employee_FirstName_LastName
+on EmployeeFirstName(FirstName, LastName)
+
+--lisame uue piirnagu peale
+alter table EmployeeFirstName
+add constraint UQ_EmployeeFirstNameCity
+unique nonclustered (City)
+
+--sisestage kolmas rida andmetega, mis on id-s 3, FirstName-s John, 
+--LastName-s Menco ja linn on London
+insert into EmployeeFirstName values(3, 'John', 'Menco', 3500, 'Male', 'London')
+
+--saab vaadata indeksite infot
+exec sp_helpconstraint EmployeeFirstName
+
+-- 1.Vaikimisi primaarv√µti loob unikaalse klastris oleva indeksi, 
+-- samas unikaalne piirang loob unikaalse mitte-klastris oleva indeksi
+-- 2. Unikaalset indeksit v√µi piirangut ei saa luua olemasolevasse tabelisse, 
+-- kui tabel juba sisaldab v√§√§rtusi v√µtmeveerus
+-- 3. Vaikimisi korduvaid v√§√§rtuseid ei ole veerus lubatud,
+-- kui peaks olema unikaalne indeks v√µi piirang. Nt, kui tahad sisestada 
+-- 10 rida andmeid, millest 5 sisaldavad korduviad andmeid, 
+-- siis k√µik 10 l√ºkatakse tagasi. Kui soovin ainult 5
+-- rea tagasi l√ºkkamist ja √ºlej√§√§nud 5 rea sisestamist, siis selleks 
+-- kasutatakse IGNORE_DUP_KEY
+
+--n√§ide
+create unique index IX_EmployeeFirstName
+on EmployeeFirstName(City)
+with ignore_dup_key
+
+insert into EmployeeFirstName values(5, 'John', 'Menco', 3512, 'Male', 'London1')
+insert into EmployeeFirstName values(6, 'John', 'Menco', 3123, 'Male', 'London2')
+insert into EmployeeFirstName values(6, 'John', 'Menco', 3220, 'Male', 'London2')
+--- enne ignore k√§sku oleks k√µik kolm rida tagasi l√ºkatud, aga
+--- n√º√ºd l√§ks keskmine rida l√§bi kuna linna nimi oli unikaalne
+select * from EmployeeFirstName
+
+--view on virtuaalne tabel, mis on loodud √ºhe v√µi mitme tabeli p√µhjal
+select FirstName, Salary, Gender, DepartmentName
+from Employees
+join Department
+on Department.Id = Employees.DepartmentId
+
+create view vw_EmployeesByDetails
+as
+select FirstName, Salary, Gender, DepartmentName
+from Employees
+join Department
+on Department.Id = Employees.DepartmentId
+--otsige √ºlesse view
+
+--kuidas view-d kasutada: vw_EmployeesByDetails
+select * from vw_EmployeesByDetails
+-- view ei salvesta andmeid vaikimisi
+-- seda tasub v√µtta, kui salvestatud virtuaalse tabelina
+
+-- milleks vaja:
+-- saab kasutada andmebaasi skeemi keerukuse lihtsutamiseks,
+-- mitte IT-inimesele
+-- piiratud ligip√§√§s andmetele, ei n√§e k√µiki veerge
+
+--teeme view, kus n√§eb ainult IT-t√∂√∂tajaid
+create view vITEmployeesInDepartment
+as
+select FirstName, Salary, Gender, DepartmentName
+from Employees
+join Department
+on Department.Id = Employees.DepartmentId
+where Department.DepartmentName = 'IT'
+-- √ºlevalpool olevat p√§ringut saab liigitada reataseme turvalisuse 
+-- alla. Tahan ainult n√§idata IT osakonna t√∂√∂tajaid
+
+select * from vITEmployeesInDepartment
+
+---rida 1400
+---tund 13
+---
+
+--veeru taseme turvalisus
+-- peale selecti m√§√§ratled veergude n√§itamise √§ra
+create view vEmployeesInDepartmentSalaryNoShow
+as
+select FirstName, Gender, DepartmentName
+from Employees
+join Department
+on Employees.DepartmentId = Department.Id
+
+select * from vEmployeesInDepartmentSalaryNoShow
+
+--saab kasutada esitlemaks koondandmeid ja √ºksikasjalike andmeid
+--view, mis tagastab summeritud andmeid
+create view vEmployeesCountByDepartment
+as
+select DepartmentName, COUNT(Employees.Id) as TotalEmployees
+from Employees
+join Department
+on Employees.DepartmentId = Department.Id
+group by DepartmentName
+
+select * from vEmployeesCountByDepartment
+
+--kui soovid vaadata view sisu?
+sp_helptext vEmployeesCountByDepartment
+--kui soovid muuta, siis kasutad alter view
+alter view vEmployeesCountByDepartment
+--kui soovid kustudata, siis kasutad drop view
+drop view vEmployeesCountByDepartment
+
+--andmete uuendamine k√§bi view
+create view vEmployeesDataExceptSalary
+as
+select Id, FirstName, Gender, DepartmentId
+from Employees
+
+select * from vEmployeesDataExceptSalary
+
+update vEmployeesDataExceptSalary
+set [FirstName] = 'Pam' where Id = 2
+
+--kustutage Id 2 rida √§ra
+delete from vEmployeesDataExceptSalary
+where Id = 2
+
+--andmete sisestamine l√§bi view
+--Id 2, female, osakond 2 ja nimi on Pam
+insert into vEmployeesDataExceptSalary
+values (2, 'Pam', 'Female', 2)
+
+--indekseeritud view
+--MS SQL-s on indekseeritud view nime all ja
+--Oracles materjaliseeritud view nimega
+
+create table Product
+(
+Id int primary key,
+Name nvarchar(20),
+UnitPrice int
+)
+
+INSERT INTO Product (Id, Name, UnitPrice) 
+VALUES (1, 'Books', 20),
+(2, 'Pens', 14),
+(3, 'Pencils', 11),
+(4, 'Clips', 10)
+
+select * from Product
+
+create table ProductSales
+(
+Id int,
+QuantitySold int
+)
+
+INSERT INTO ProductSales (Id, QuantitySold) 
+VALUES (1, 10),
+(3, 23),
+(4, 21),
+(2, 12),
+(1, 13),
+(3, 12),
+(4, 13),
+(1, 11),
+(2, 12),
+(1, 14)
+
+select * from ProductSales
+
+--loome view, mis annab meile veerud TotalSales ja TotalTransaction
+
+create view vTotalSalesByProduct
+with schemabinding
+as
+select Name,
+sum(isnull((QuantitySold * UnitPrice), 0)) as TotalSales,
+count_big(*) as TotalTransaction
+from dbo.ProductSales
+join dbo.Product
+on dbo.Product.id = dbo.ProductSales.Id
+group by Name
+
+select * from vTotalSalesByProduct
+
+--- kui soovid luua indeksi view sisse, siis peab j√§rgima teatud reegleid
+-- 1. view tuleb luua koos schemabinding-ga
+-- 2. kui lisafunktsioon select list viitab v√§ljendile ja selle tulemuseks 
+--v√µib olla NULL, siis asendusv√§√§rtus peaks olema t√§psustatud.
+-- Antud juhul kasutasime ISNULL funktsiooni asendamaks NULL v√§√§rtust
+-- 3. kui GroupBy on t√§psustatud, siis view select list peab 
+--sisaldama COUNT_BIG(*) v√§ljendit
+-- 4. Baastabelis peaksid view-d olema viidatud kahesosalise nimega
+-- e antud juhul dbo.Product ja dbo.ProductSales.
+
+create unique clustered index UIX_vTotalSalesByProduct_Name
+on vTotalSalesByProduct(Name)
+
+select * from vTotalSalesByProduct
+
+--view piirangud
+create view vEmployeeDetails
+@Gender nvarchar(20)
+as
+Select Id, FirstName, Gender, DepartmentId
+from Employees
+where Gender = @Gender
+--mis on selles views valesti???
+--vaatesse ei saa kaasa pana parameetreid e antud juhul Gender
+
+--teha funktsioon, kus parameetriks on Gender
+--soovin n√§ha veerge: Id, FirstName, Gender, DepartmentId
+--tabeli nimi on Employess
+--Funktsiooni nimi on fnEmployeeDetails
+create function fnEmployeeDetails(@Gender nvarchar(20))
+returns table
+as return
+(select Id, FirstName, Gender, DepartmentId
+from Employees where Gender = @Gender)
+
+select * from fnEmployeeDetails('Female')
+
+--order by kasutamine
+create view vEmployeeDetailsStored
+as
+select Id, FirstName, Gender, DepartmentId
+from Employees
+order by Id
+--order by-d ei saa kasutada
+
+--temp tabeli kasutamine
+create table ##TestTempTable
+(Id int, FirstName nvarchar(20), Gender nvarchar(20))
+
+insert into ##TestTempTable 
+values(101, 'Mart', 'Male'),
+(102, 'Joe', 'Female'),
+(103, 'Pam', 'Female'),
+(104, 'James', 'Male')
+
+select * from ##TestTempTable
+
+--view nimi on vOnTempTable
+--kasutame ##TestTempTable
+create view vOnTempTable
+as
+select Id, FirstName, Gender
+from ##TestTempTable
+--view-id ja funktsioone ei saa teha ajutistele tabelitele
+
+--TriggerId
+
+--DML trigger
+--kokku on kolme t√º√ºpi: DML, DDL ja LOGON
+
+--- trigger on stored procedure eriliik, mis automaatselt k√§ivitub,
+--- kui mingi tegevus
+--- peaks andmebaasis aset leidma
+
+--- DML ‚Äì data manipulation language
+--- DML-i p√µhilised k√§sklused: insert, update ja delete
+
+-- DML triggereid saab klassifitseerida kahte t√º√ºpi:
+-- 1. After trigger (kutsutakse ka FOR triggeriks)
+-- 2. Instead of trigger (selmet trigger e selle asemel trigger)
+
+--- after trigger k√§ivitub peale s√ºndmust, kui kuskil on tehtud insert,
+--- update ja delete
+
+--loome uue tabeli
+create table EmployeeAudit
+(
+Id int identity(1, 1) primary key,
+AuditData nvarchar(1000)
+)
+
+-- peale iga t√∂√∂taja sisestamist tahame teada saada t√∂√∂taja Id-d,
+-- p√§eva ning aega(millal sisestati)
+-- k√µik andmed tulevad EmployeeAudit tabelisse
+-- andmeid sisestame Employees tabelisse
+
+create trigger trEmployeeForInsert
+on Employees 
+for insert
+as begin
+declare @Id int
+select @Id = Id from inserted
+insert into EmployeeAudit
+values ('new employee with Id = ' + CAST(@Id as nvarchar(5)) + ' is added at '
++ CAST(GETDATE() as nvarchar(20)))
+end
+
+select * from Employees
+
+insert into Employees
+values (11, 'Bob', 'Male', 3000, 1, 'Bomb', 'Blob', 3, 'bob@bob.com')
+go
+select * from EmployeeAudit
+
+
+
+--delete trigger
+create trigger trEmployeeForDelete
+on Employees
+for delete
+as begin
+    declare @Id int
+    select @Id = Id from deleted
+
+    insert into EmployeeAudit
+    values('An existing employee with Id = ' + cast(@Id as nvarchar(5)) +
+    ' is deleted at ' + cast(getdate() as nvarchar(20)))
+end
+
+delete from Employees where Id = 11
+select * from EmployeeAudit
+
+--update trigger
+create trigger trEmpoyeesForUpdate
+on Employees
+for update
+as begin
+    --muutujate deklareerimine
+    declare @Id int
+    declare @OldGender nvarchar(20), @NewGender nvarchar(20)
+    declare @OldSalary int, @NewSalary int
+    declare @OldDepartmentId int, @NewDepartmentId int
+    declare @OldManagerId int, @NewManagerId int
+	declare @OldFirstName nvarchar(20), @NewFirstName nvarchar(20)
+    declare @OldMiddleName nvarchar(20), @NewMiddleName nvarchar(20)
+    declare @OldLastName nvarchar(20), @NewLastName nvarchar(20)
+    declare @OldEmail nvarchar(50), @NewEmail nvarchar(50)
+
+	--muutuja, kuhu l√§heb l√µpptekst
+	declare @AuditString nvarchar(100)
+
+	--laeb k√µik uuendatud andmed temp tabeli alla
+	select * from #TempTable
+	from inserted
+
+	--k√§ib l√§bi k√µik andmed temp tabelist
+	while(exists(select Id from #TempTable))
+	begin
+	set @AuditString = ''
+	--selekteerib esimese rea andmed temp tabelist
+	select top 1 @Id = Id, @NewGender = Gender,
+    @NewSalary = Salary, @NewDepartmentId = DepartmentId,
+    @NewManagerId = ManagerId, @NewFirstName = FirstName,
+    @NewMiddleName = MiddleName, @NewLastName = LastName,
+    @NewEmail = Email
+    from #TempTable
+	
+	--v√µtab vanad andmed kustutatud tabelist
+	select @OldSalary = Salary, @OldDepartmentId = DepartmentId,
+    @OldManagerId = ManagerId, @OldFirstName = FirstName,
+    @OldMiddleName = MiddleName, @OldLastName = LastName,
+    @OldEmail = Email
+	from deleted¬¥where Id = @Id
+
+	--tund 14
+
+
+

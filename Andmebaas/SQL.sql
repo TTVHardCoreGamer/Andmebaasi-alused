@@ -1704,7 +1704,7 @@ as begin
 	declare @AuditString nvarchar(100)
 
 	--laeb kõik uuendatud andmed temp tabeli alla
-	select * from #TempTable
+	select * into #TempTable
 	from inserted
 
 	--käib läbi kõik andmed temp tabelist
@@ -1724,9 +1724,304 @@ as begin
     @OldManagerId = ManagerId, @OldFirstName = FirstName,
     @OldMiddleName = MiddleName, @OldLastName = LastName,
     @OldEmail = Email
-	from deleted´where Id = @Id
+	from deleted where Id = @Id
 
 	--tund 14
+
+	--hakkab võrdlema igat muutujat, et kas toimus andmete muutus
+set @AuditString = 'Employee with Id = ' + cast(@Id as nvarchar(4)) + ' changed '
+if (@OldGender <> @NewGender)
+    set @AuditString = @AuditString + ' Gender from ' + @OldGender + ' to ' + @NewGender
+
+if (@OldSalary <> @NewSalary)
+    set @AuditString = @AuditString + ' Salary from ' + cast(@OldSalary as nvarchar(20)) + ' to ' + 
+	cast(@NewSalary as nvarchar(20))
+
+if (@OldDepartmentId <> @NewDepartmentId)
+    set @AuditString = @AuditString + ' DepartmentId from ' + cast(@OldDepartmentId as nvarchar(20)) + ' to ' + 
+	cast(@NewDepartmentId as nvarchar(20))
+
+if (@OldManagerId <> @NewDepartmentId)
+    set @AuditString = @AuditString + ' ManagerId from ' + cast(@OldManagerId as nvarchar(20)) + ' to ' + 
+	cast(@NewManagerId as nvarchar(20))
+
+if (@OldFirstName <> @NewFirstName)
+    set @AuditString = @AuditString + ' FirstName from ' + @OldFirstName + ' to ' + 
+	@NewFirstName
+
+if (@OldMiddleName <> @NewMiddleName)
+    set @AuditString = @AuditString + ' MiddleName from ' + @OldMiddleName + ' to ' + 
+	@NewMiddleName
+
+if (@OldLastName <> @NewLastName)
+    set @AuditString = @AuditString + ' LastName from ' + @OldLastName + ' to ' + 
+	@NewLastName
+
+if (@OldEmail <> @NewEmail)
+    set @AuditString = @AuditString + ' Email from ' + @OldEmail + ' to ' + 
+	@NewEmail
+
+insert into dbo.EmployeeAudit values (@AuditString)
+--kustutab temp tabelist rea
+delete from #TempTable where Id = @Id
+  end
+end
+--triggeri lõpp
+
+update Employees set FirstName = 'test123', Salary = 4000, MiddleName = 'test456'
+where Id = 10
+
+Select * from Employees
+Select * from EmployeeAudit
+----
+
+--instead of trigger
+create table Employee
+(
+Id int primary key,
+Name nvarchar(30),
+Gender nvarchar(10),
+DepartmentId int
+)
+
+--kellel ei ole seda tabelit, siis nemad sisestavad selle koodi
+create table Department
+(
+Id int primary key,
+DepartmentName nvarchar(20)
+)
+
+insert into Employee (Id, Name, Gender, DepartmentId) 
+values (1, 'John', 'Male', 3),
+(2, 'Mike', 'Male', 2),
+(3, 'Pam', 'Female', 1),
+(4, 'Todd', 'Male', 4),
+(5, 'Sara', 'Female', 1),
+(6, 'Ben', 'Male', 3)
+
+select * from Employee
+
+create view vEmployeeDetails
+as
+select Employee.Id, Name, Gender, DepartmentName
+from Employee
+join Department
+on Employee.DepartmentId = Department.Id
+
+select * from vEmployeeDetails
+
+--tuleb veateade
+insert into vEmployeeDetails 
+values (7, 'Valarie', 'Female', 'IT')
+
+--nüüd proovime lahendada probleemi, kui kasutame instead of trigger-it
+create trigger tr_vEmployeeDetails_InsteadOfInsert
+on vEmployeeDetails
+instead of insert
+as begin
+   declare @DeptId int
+
+   select @DeptId = dbo.Department.Id
+   from Department
+   join inserted 
+   on inserted.DepartmentName = Department.DepartmentName
+
+   if(@DeptId is null)
+      begin 
+	  raiserror('Invalid department name. Statement terminated', 16, 1)
+	  return
+end
+
+insert into dbo.Employee(Id, Name, Gender, DepartmentId)
+select Id, Name, Gender, @DeptId
+from inserted
+end
+--raiserror funktsioon
+--selle eesmärk on tuua välja veateade, kui DepartmentName veerus ei ole väärtust
+--ja ei klapi uue sisestatadu väärtusega.
+--Esimene on parameeter ja veatete sisu, teine on veataseme nr (nr 16 tähendab 
+--üldiseid vigu) ja kolmas on olek
+
+--nüüd saab läbi view sisestada andmeid
+insert into vEmployeeDetails 
+values (7, 'Valarie', 'Female', 'IT')
+
+select * from vEmployeeDetails
+
+--uuendame andmeid 
+update vEmployeeDetails
+set Name = 'Johnny', DepartmentName = 'IT'
+where Id = 1
+--ei saa uuendada andmeid kuna mitu tabelit on sellest mõjutatud
+
+update vEmployeeDetails
+set DepartmentName = 'IT'
+where Id = 1
+
+select * from vEmployeeDetails
+
+--instead of Update trigger
+create trigger tr_vEmployeeDetails_InsteadOfUpdate
+on vEmployeeDetails
+instead of update
+as begin
+   
+   if(UPDATE(Id))
+   begin 
+       raiserror('Id cannot be changed', 16, 1)
+	   return
+   end
+
+   if(UPDATE(DepartmentName))
+   begin
+      declare @DeptId int
+	  select @DeptId = Department.Id
+	  FROM Department
+	  join inserted
+	  on inserted.DepartmentName = Department.DepartmentName
+
+	  if(@DeptId is null)
+	  begin 
+	      raiserror('´Invalid Department Name', 16, 1)
+	      return
+	  end
+
+	  update Employee set DepartmentId = @DeptId
+	  from inserted
+	  join Employee
+	  on Employee.Id = inserted.Id
+	  end
+
+	  if(UPDATE(Gender))
+	  begin
+	      update Employee set Gender = inserted.Gender
+		  from inserted
+		  join Employee
+		  on Employee.Id = inserted.Id
+	  end
+
+	  if(UPDATE(Name))
+	  begin
+	      update Employee set Name = inserted.Name
+		  from inserted
+		  join Employee
+		  on Employee.Id = inserted.Id
+	 end
+end
+
+--nüüd töötab
+update Employee
+set Name = 'John123', Gender = 'Male', DepartmentId = 3
+where Id = 1
+
+select * from vEmployeeDetails
+
+--delete trigger
+create view vEmployeeCount
+as
+select DepartmentId, DepartmentName, COUNT(*) as TotalEmployees
+from Employee
+join Department
+on Employee.DepartmentId = Department.Id
+group by DepartmentName, DepartmentId
+
+select * from vEmployeeCount
+
+--vaja teha päring, kus on tõõtajaid 2tk või rohkem
+--kasutada vEmployeeCount
+select * from vEmployeeCount
+where TotalEmployees >= 2
+
+---
+select DepartmentName, DepartmentId, COUNT(*) as TotalEmployees
+into #TempEmployeeCount 
+from Employee
+join Department
+on Employee.DepartmentId = Department.Id
+group by DepartmentName, DepartmentId
+
+select * from #TempEmployeeCount 
+
+--läbi ajutise tabeli saab samu andmeid vaadata, kui seal on info olemas
+select * from #TempEmployeeCount
+where TotalEmployees >= 2
+
+--tuleb teha trigger nimega trEmployeeDetails_InsteadOfDelete
+--ja kasutada vEmployeeDetails
+--triggeri tüüp on istead of delete
+create trigger trEmployeeDetails_InsteadOfDelete
+on vEmployeeDetails
+instead of delete
+as
+begin
+ delete Employee
+ from Employee
+ join deleted
+ on Employee.Id = deleted.Id
+end
+
+delete from vEmployeeDetails where Id = 7
+
+--- CTE e common table expression
+select * from Employee
+
+--CTE näide
+with EmployeeCount(DepartmentName, DepartmentId, TotalEmployees)
+as 
+   (
+   select DepartmentName, DepartmentId, COUNT(*) as TotalEmployees
+   from Employee
+   join Department
+   on Employee.DepartmentId = Department.Id
+   group by DepartmentName, DepartmentId
+   )
+select DepartmentName, TotalEmployees
+from EmployeeCount
+where TotalEmployees >= 2
+
+--CTE-d võivad sarnaneda temp tabeliga
+--sarnane päritud tabelile ja ei ole salvestatud objektina
+-- ning kestab päringu ulatuses
+
+--päritud tabel
+select DepartmentName, TotalEmployees
+from 
+(
+    select DepartmentName, DepartmentId, COUNT(*) as TotalEmployees
+    from Employee
+    join Department
+    on Employee.DepartmentId = Department.Id
+    group by DepartmentName, DepartmentId
+)
+as EmployeeCount
+where TotalEmployees >= 2
+
+--tehke päring, kus on kaks CTE päringut sees
+with EmployeeCountBy_Payroll_IT_Dept(DepartmentName, Total)
+as
+(
+   select DepartmentName, count(Employee.Id) as TotalEmployees
+   from Employee
+   join Department
+   on Employee.DepartmentId = Department.Id
+   where DepartmentName in ('Payroll', 'IT')
+   group by DepartmentName
+),
+EmployeeCountBy_HR_Admin_Dept(DepartmentName, Total)
+as
+(
+   select DepartmentName, count(Employee.Id) as TotalEmployees
+   from Employee
+   join Department
+   on Employee.DepartmentId = Department.Id
+   group by DepartmentName
+)
+--kui on kaks CTE, siis unioni abil ühendab päringu
+select * from EmployeeCountBy_Payroll_IT_Dept
+union
+select * from EmployeeCountBy_HR_Admin_Dept
+
+
 
 
 

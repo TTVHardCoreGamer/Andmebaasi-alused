@@ -2021,7 +2021,20 @@ select * from EmployeeCountBy_Payroll_IT_Dept
 union
 select * from EmployeeCountBy_HR_Admin_Dept
 
-
-
-
-
+--teha CTE päring nimega EmployeeCount
+--järjestaks DepartmentName järgi ära
+with EmployeeCount(DepartmentId, TotalEmployees)
+as
+   (
+       select DepartmentId, count(*) as TotalEmployees
+	   from Employee
+	   group by DepartmentId
+   )
+--select 'Hello'
+--- peale CTE-d peab kohe tulema käsklus SELECT, INSERT, UPDATE või DELETE
+--- kui proovid midagi muud, siis tuleb veateade
+select DepartmentName
+from Department
+join Employee
+on Department.Id = Employee.DepartmentId
+order by DepartmentName

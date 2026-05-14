@@ -2038,3 +2038,196 @@ from Department
 join Employee
 on Department.Id = Employee.DepartmentId
 order by DepartmentName
+
+
+--tund 15
+
+--uuendamine CTE-s
+
+with Employee_Name_Gender
+as
+(
+select Id, Name, Gender from Employee
+)
+select * from Employee_Name_Gender
+
+--kasutame JOIN-i CTE tegemiseks
+with EmployeesByDepartment
+as
+(
+    select Employee.Id, Employee.Name, Department.DepartmentName
+    from Employee
+    join Department
+	on Employee.DepartmentId = Department.Id
+)
+select * from EmployeesByDepartment
+
+--nüüd muudame andmeid CTE-s
+with EmployeesByDepartment
+as
+(
+    select Employee.Id, Employee.Name, Gender, Department.DepartmentName
+    from Employee
+    join Department
+	on Department.Id = Employee.DepartmentId
+)
+update EmployeesByDepartment set Gender = 'Male' where Id = 1
+
+--kasutage eelmist CTE andmete muutmiseks,
+--aga seekord muutke Id 1 töötaja Gender female peale ja 
+--DepartmentName Payroll peale
+
+with EmployeesByDepartment
+as
+(
+    select Employee.Id, Employee.Name, Gender, DepartmentName
+    from Employee
+    join Department
+	on Department.Id = Employee.DepartmentId
+)
+update EmployeesByDepartment set Gender = 'Female' where Id = 1, DepartmentName = 'Payroll'
+where Id = 1
+--ei luba mitmes tabelis korraga andmeid muuta, kui on tegemist CTE-ga
+
+--- kokkuvõte CTE-st
+-- 1. kui CTE baseerub ühel tabelil, siis uuendus töötab
+-- 2. kui CTE baseerub mitmel tabelil, siis tuleb veateade
+-- 3. kui CTE baseerub mitmel tabelil ja tahame muuta ainult ühte tabelit,
+-- siis uuendus saab tehtud
+
+--korduv CTE 
+-- CTE, mis iseendale viitab, kutsutakse korduvaks CTE-ks
+--kui tahad andmeid näidata hierarhiliselt
+
+Create table Employee
+(
+  EmployeeId int Primary key,
+  Name nvarchar(20),
+  ManagerId int 
+)
+
+select * from Employee
+
+insert into Employee (EmployeeId, Name, ManagerId)
+values (1, 'Tom', 2),
+(2, 'Josh', NULL),
+(3, 'Mike', 2),
+(4, 'John', 3),
+(5, 'Pam', 1),
+(6, 'Mary', 3),
+(7, 'James', 1),
+(8, 'Sam', 5),
+(9, 'Simon', 1)
+
+-- kasutame left joini, et näha kõiki nende töötajaid ja nende juhte
+select Emp.Name [Employee Name],
+isnull(Manager.Name, 'Super Boss') as [Manager Name]
+from dbo.Employee Emp
+left join Employee Manager
+on Emp.ManagerId = Manager.EmployeeId
+
+--peab samasuguse tulemuse saavutama, aga kasutate CTE-d
+--seal sees ei kasuta joini koos union alliga
+
+with EmployeeCTE(Id, Name, ManagerId, [Level])
+as
+(
+     select Employee.EmployeeId, Employee.Name, Employee.ManagerId, 1
+	 from Employee
+	 where ManagerId is null
+
+	 union all
+
+	 select Employee.EmployeeId, Employee.Name, Employee.ManagerId,
+	 EmployeeCTE.[Level] + 1
+	 from Employee
+	 join EmployeeCTE 
+	 on Employee.ManagerId = EmployeeCTE.Id
+)
+select Empcte.Name as Employee,
+isnull(MgrCTE.Name, 'Super Boss') as [Manager Name],
+EmpCTE.Level as [Boss Level]
+from EmployeeCTE Empcte
+left join Employee MgrCTE
+on Empcte.ManagerId = MgrCTE.EmployeeId
+
+---PIVOT
+--Mis on PIVOT?
+--PIVOT on SQL-i operatsioon, mis võimaldab teisendada ridu veergudeks
+
+create table Sales
+(
+   SalesAgent nvarchar(20),
+   SalesCountry nvarchar(20),
+   SalesAmount int
+)
+
+insert into Sales (SalesAgent, SalesCountry, SalesAmount) 
+values ('Tom', 'UK', 200),
+('John', 'US', 180),
+('John', 'UK', 260),
+('David', 'India', 450),
+('Tom', 'India', 350),
+('David', 'US', 200),
+('Tom', 'US', 130),
+('John', 'India', 540),
+('John', 'UK', 120),
+('David', 'UK', 220),
+('John', 'UK', 420),
+('David', 'US', 320),
+('Tom', 'US', 340),
+('Tom', 'UK', 660),
+('John', 'India', 430),
+('David', 'India', 230),
+('David', 'India', 280),
+('Tom', 'UK', 480),
+('John', 'UK', 360),
+('David', 'UK', 140)
+
+----
+select SalesCountry, SalesAgent, SUM(SalesAmount) as TotalSales
+from Sales
+group by SalesCountry, SalesAgent
+order by SalesCountry, SalesAgent
+
+--kasuta pivotit,et saada sama tulemus nagu ülemises päringus
+select SalesAgent, India, US, UK
+from Sales
+pivot
+(
+   sum(SalesAmount) for SalesCountry in (India, US, UK)
+)
+as PivotTable
+
+--päring muudab unikaalsete veergude väärtust (India, US ja UK) SalesCountry veerus
+-- omaette veergudeks koos veergude SalesAmount liitmisega
+
+create table SalesWithId
+(
+   Id int primary key,
+   SalesAgent nvarchar(20),
+   SalesCountry nvarchar(20),
+   SalesAmount int 
+)
+
+insert into SalesWithId (Id, SalesAgent, SalesCountry, SalesAmount) 
+values (1, 'Tom', 'UK', 200),
+(2, 'John', 'US', 180),
+(3, 'John', 'UK', 260),
+(4, 'David', 'India', 450),
+(5, 'Tom', 'India', 350),
+(6, 'David', 'US', 200),
+(7, 'Tom', 'US', 130),
+(8, 'John', 'India', 540),
+(9, 'John', 'UK', 120),
+(10, 'David', 'UK', 220),
+(11, 'John', 'UK', 420),
+(12, 'David', 'US', 320),
+(13, 'Tom', 'US', 340),
+(14, 'Tom', 'UK', 660),
+(15, 'John', 'India', 430),
+(16, 'David', 'India', 230),
+(17, 'David', 'India', 280),
+(18, 'Tom', 'UK', 480),
+(19, 'John', 'UK', 360),
+(20, 'David', 'UK', 140)
